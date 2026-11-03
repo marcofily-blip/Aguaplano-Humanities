@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="note" version="1.0" demote-non-dropping-particle="sort-only" default-locale="it-IT">
+  <info>
+    <title>Aguaplano Humanities</title>
+    <title-short>Aguaplano Hum</title-short>
+    <id>http://www.zotero.org/styles/aguaplano-humanities</id>
+    <link href="http://www.zotero.org/styles/aguaplano-humanities" rel="self"/>
+    <link href="http://www.aguaplano.eu" rel="documentation"/>
+    <author>
+      <name>Gemini</name>
+    </author>
+    <category citation-format="note"/>
+    <category field="humanities"/>
+    <updated>2026-11-03T00:00:00+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+  </info>
+
+  <locale xml:lang="it">
+    <terms>
+      <term name="editor" form="short">a cura di</term>
+      <term name="page-range-delimiter">-</term>
+      <term name="page" form="short">
+        <single>p.</single>
+        <multiple>pp.</multiple>
+      </term>
+      <term name="in">in</term>
+    </terms>
+  </locale>
+
+  <!-- Autore in nota: Iniziale. COGNOME in MAIUSCOLETTO (es. J. HABERMAS) -->
+  <macro name="author-note">
+    <names variable="author">
+      <name initialize-with=". " delimiter="-" font-variant="small-caps"/>
+      <substitute>
+        <names variable="editor"/>
+        <names variable="translator"/>
+        <text variable="title" font-style="italic"/>
+      </substitute>
+    </names>
+  </macro>
+
+  <!-- Autore in bibliografia: COGNOME, Nome esteso (non maiuscoletto, es. FREUD, Sigmund) -->
+  <macro name="author-bib">
+    <names variable="author">
+      <name name-as-sort-order="all" sort-separator=", " delimiter="-"/>
+      <substitute>
+        <names variable="editor">
+          <name name-as-sort-order="all" sort-separator=", " delimiter="-"/>
+          <label form="short" prefix=" (" suffix=")"/>
+        </names>
+        <names variable="translator"/>
+        <text variable="title" font-style="italic"/>
+      </substitute>
+    </names>
+  </macro>
+
+  <macro name="title">
+    <choose>
+      <if type="article-journal article-magazine article-newspaper chapter paper-conference" match="any">
+        <text variable="title"/>
+      </if>
+      <else>
+        <text variable="title" font-style="italic"/>
+      </else>
+    </choose>
+  </macro>
+
+  <macro name="publisher-note">
+    <group delimiter=", ">
+      <text variable="publisher"/>
+      <group delimiter=" ">
+        <text variable="publisher-place"/>
+        <date variable="issued">
+          <date-part name="year"/>
+        </date>
+      </group>
+    </group>
+  </macro>
+
+  <macro name="publisher-bib">
+    <group delimiter=", ">
+      <text variable="publisher"/>
+      <group delimiter=" ">
+        <text variable="publisher-place"/>
+        <date variable="issued">
+          <date-part name="year"/>
+        </date>
+      </group>
+    </group>
+  </macro>
+
+  <!-- Edizione originale tra quadre [Titolo orig., Editore, Citta Anno] -->
+  <macro name="extras-bib">
+    <group delimiter=" " prefix=" ">
+      <group prefix="[" suffix="]" delimiter=", ">
+        <text variable="original-title" font-style="italic"/>
+        <group delimiter=" ">
+          <text variable="original-publisher"/>
+          <text variable="original-publisher-place"/>
+          <date variable="original-date">
+            <date-part name="year"/>
+          </date>
+        </group>
+      </group>
+      <text variable="note" prefix="[" suffix="]"/>
+    </group>
+  </macro>
+
+  <!-- CITAZIONE IN NOTA A PIÈ DI PAGINA -->
+  <citation>
+    <layout suffix="." delimiter="; ">
+      <choose>
+        <!-- Riferimento identico con pagina diversa: Ivi, p. 200 -->
+        <if position="ibid-with-locator">
+          <group delimiter=", ">
+            <text value="Ivi"/>
+            <group delimiter=" ">
+              <label variable="locator" form="short"/>
+              <text variable="locator"/>
+            </group>
+          </group>
+        </if>
+        <!-- Riferimento identico e stessa pagina: Ibidem -->
+        <else-if position="ibid">
+          <text value="Ibidem"/>
+        </else-if>
+        <!-- Citazione completa in nota -->
+        <else>
+          <group delimiter=", ">
+            <text macro="author-note"/>
+            <choose>
+              <!-- Articoli di rivista -->
+              <if type="article-journal article-magazine article-newspaper" match="any">
+                <text macro="title"/>
+                <text variable="container-title" prefix="in &#171;" suffix="&#187;"/>
+                <group delimiter=" ">
+                  <date variable="issued">
+                    <date-part name="year"/>
+                  </date>
+                  <text variable="volume" text-case="uppercase" prefix="(" suffix=")"/>
+                </group>
+                <group delimiter=" ">
+                  <label variable="locator" form="short"/>
+                  <text variable="locator"/>
+                </group>
+              </if>
+              <!-- Capitoli di libri / Saggi -->
+              <else-if type="chapter paper-conference" match="any">
+                <text macro="title"/>
+                <group delimiter=" ">
+                  <text term="in"/>
+                  <text variable="container-title" font-style="italic"/>
+                </group>
+                <text macro="publisher-note"/>
+                <group delimiter=" ">
+                  <label variable="locator" form="short"/>
+                  <text variable="locator"/>
+                </group>
+              </else-if>
+              <!-- Monografie / Libri -->
+              <else>
+                <text macro="title"/>
+                <text macro="publisher-note"/>
+                <group delimiter=" ">
+                  <label variable="locator" form="short"/>
+                  <text variable="locator"/>
+                </group>
+              </else>
+            </choose>
+          </group>
+        </else>
+      </choose>
+    </layout>
+  </citation>
+
+  <!-- BIBLIOGRAFIA FINALE -->
+  <bibliography hanging-indent="true" entry-spacing="1">
+    <sort>
+      <key macro="author-bib"/>
+      <key variable="title"/>
+    </sort>
+    <layout suffix=".">
+      <group delimiter=", ">
+        <text macro="author-bib"/>
+        <choose>
+          <!-- Articoli in rivista -->
+          <if type="article-journal article-magazine article-newspaper" match="any">
+            <text macro="title"/>
+            <text variable="container-title" prefix="in &#171;" suffix="&#187;"/>
+            <group delimiter=" ">
+              <date variable="issued">
+                <date-part name="year"/>
+              </date>
+              <text variable="volume" text-case="uppercase" prefix="(" suffix=")"/>
+            </group>
+            <group delimiter=" ">
+              <label variable="page" form="short"/>
+              <text variable="page"/>
+            </group>
+          </if>
+          <!-- Capitoli o Saggi -->
+          <else-if type="chapter paper-conference" match="any">
+            <text macro="title"/>
+            <group delimiter=" ">
+              <text term="in"/>
+              <text variable="container-title" font-style="italic"/>
+            </group>
+            <text macro="publisher-bib"/>
+            <group delimiter=" ">
+              <label variable="page" form="short"/>
+              <text variable="page"/>
+            </group>
+          </else-if>
+          <!-- Libri -->
+          <else>
+            <text macro="title"/>
+            <text macro="publisher-bib"/>
+          </else>
+        </choose>
+      </group>
+      <text macro="extras-bib"/>
+    </layout>
+  </bibliography>
+</style>
